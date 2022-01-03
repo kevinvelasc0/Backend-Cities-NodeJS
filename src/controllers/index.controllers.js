@@ -13,9 +13,17 @@ const getPais = async (req, res) => {
     res.status(200).json(response.rows);
 };
 const getCiudad = async (req, res) => {
-    const response = await pool.query('SELECT c.nombre, p.nombre as pais from ciudad c join pais p on c.id_pais=p.id');
+    const response = await pool.query('SELECT c.id, c.nombre, p.nombre as pais from ciudad c join pais p on c.id_pais=p.id');
     res.status(200).json(response.rows);
 };
+
+
+const getCiudadById = async (req,res) => {
+    const identificador = req.params.id;
+    const response = await pool.query('SELECT c.id, c.nombre, p.nombre as pais from ciudad c join pais p on c.id_pais=p.id WHERE c.id = $1', [identificador]);    
+    res.json(response.rows);
+}
+
 const createCiudad = async (req, res) => {
     const { nombre, id_pais } = req.body;
     const response = await pool.query('INSERT INTO ciudad (nombre,id_pais) VALUES ($1, $2)', [nombre,id_pais])
@@ -27,6 +35,20 @@ const createCiudad = async (req, res) => {
     })
 }
 
+const deleteCiudad = async (req, res) => {
+    const id = req.params.id;
+    const response = await pool.query('DELETE FROM ciudad WHERE id = $1', [id])
+    res.json('Ciudad eliminada')
+}
+
+const updateCiudad = async (req, res) => {
+    const id = req.params.id;
+    const { nombre } = req.body;
+    const response = await pool.query('UPDATE ciudad SET nombre = $1 WHERE id = $2', [nombre,id])
+    res.json('Ciudad actualizada')
+    console.log(id,nombre)
+}
+
 
 const createPais = async (req ,res) => {
 
@@ -35,5 +57,8 @@ const createPais = async (req ,res) => {
 module.exports = {
     getPais,
     getCiudad,
-    createCiudad
+    createCiudad,
+    getCiudadById,
+    deleteCiudad,
+    updateCiudad
 }
