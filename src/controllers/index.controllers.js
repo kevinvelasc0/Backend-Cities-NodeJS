@@ -46,7 +46,6 @@ const updateCiudad = async (req, res) => {
     const { nombre } = req.body;
     const response = await pool.query('UPDATE ciudad SET nombre = $1 WHERE id = $2', [nombre,id])
     res.json('Ciudad actualizada')
-    console.log(id,nombre)
 }
 
 
