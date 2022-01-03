@@ -19,8 +19,8 @@ const getCiudad = async (req, res) => {
 
 
 const getCiudadById = async (req,res) => {
-    const identificador = req.params.id;
-    const response = await pool.query('SELECT c.id, c.nombre, p.nombre as pais from ciudad c join pais p on c.id_pais=p.id WHERE c.id = $1', [identificador]);    
+    const id = req.params.id;
+    const response = await pool.query('SELECT c.id, c.nombre, p.nombre as pais from ciudad c join pais p on c.id_pais=p.id WHERE c.id = $1', [id]);    
     res.json(response.rows);
 }
 
